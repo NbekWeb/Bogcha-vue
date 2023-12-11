@@ -1,7 +1,7 @@
-import './assets/main.css'
-
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+
+import VueCookies from 'vue-cookies'
 
 import App from './App.vue'
 import router from './router'
@@ -19,5 +19,6 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(createPinia())
 app.use(router)
 app.use(ElementPlus)
+app.use(VueCookies, { expires: '1d'})
 
 app.mount('#app')

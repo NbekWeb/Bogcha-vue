@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "@/stores/user/auth";
+import cookie from 'vue-cookies';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,6 +14,11 @@ const router = createRouter({
           path: "/dashboard",
           name: "dashboard",
           component: () => import("@/views/dashboard.vue"),
+        },
+        {
+          path:"/product",
+          name: "product",
+          component: () => import("@/views/product/products.vue"),
         },
       ],
     },
@@ -36,11 +42,19 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.name == "login" || to.name == "reg") next()
-  else {
-    const authStore = useAuthStore();
-    authStore.checkUser();
+  if (to.name == "login" || to.name == "reg"){ 
+    // console.log('1');
     next()
+  }
+  else {
+    if(cookie.get('bogcha-token')){
+      next()
+    }
+    else{
+      // console.log('sasa');
+      router.push('/login')
+    }
+    
   }
 });
 

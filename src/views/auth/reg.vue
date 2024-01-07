@@ -9,23 +9,26 @@
       @submit.prevent="regis"
     >
       <el-form-item label="Loginni kiriting" prop="login">
-        <el-input v-model="user.login" />
+        <el-input v-model="user.login"
+         @blur="loginCheck"
+          />
       </el-form-item>
       <el-form-item label="Parolni kiriting" prop="password">
-        <el-input
-          v-model="user.password"
-          type="password"
-          show-password
-        />
+        <el-input v-model="user.password" type="password" show-password />
       </el-form-item>
       <router-link to="/login">Ro'yxatdan o'tganmisiz</router-link>
-      <el-button type="success" @click="regis"> Kirish </el-button>
+      <el-button 
+       type="success" 
+       @click="regis"
+       :disabled="status"
+      > Kirish </el-button>
     </el-form>
   </div>
 </template>
 <script setup>
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/user/auth";
+import { ElMessage } from "element-plus";
 
 const user = ref({});
 const regForm = ref();
@@ -57,11 +60,34 @@ const regis = async () => {
   if (!regForm) return;
   await regForm.value.validate((valid, fields) => {
     if (valid) {
-      authStore.registration({ login: user.value.login, password: user.value.password });
+      authStore.registration({
+        login: user.value.login,
+        password: user.value.password,
+      });
     } else {
       console.log("error submit!", fields);
     }
   });
 };
+
+const loginCheck = async () => {
+  let res = await authStore.checkLogin({
+    login: user.value.login,
+  });
+  if (res.status == 200) {
+    if(res.data=='yes'){
+      status.value = true;
+      ElMessage({
+        type:'warning',
+        message: 'Bunday nomdagi foydalanuvchi mavjud!'
+      })
+    }
+    else if(res.data=='no'){
+      status.value = false;
+    }
+  }
+};
+
+const status=ref(false)
 </script>
 <style lang=""></style>

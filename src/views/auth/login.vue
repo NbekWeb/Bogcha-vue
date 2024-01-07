@@ -25,6 +25,7 @@
   </template>
   <script setup>
   import { ref } from "vue";
+  import cookie from "vue-cookies";
   import { useAuthStore } from "@/stores/user/auth";
   
   const user = ref({});

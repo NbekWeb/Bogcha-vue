@@ -8,7 +8,7 @@ import { useTokenStore } from "./token";
 
 export const useAuthStore = defineStore("auth", () => {
   const user = ref({});
-  const tokenStore=useTokenStore()
+  const tokenStore = useTokenStore();
   const apiStore = useApiStore();
 
   const setUser = (payload) => {
@@ -21,6 +21,7 @@ export const useAuthStore = defineStore("auth", () => {
       url: "auth/reg",
       data: payload,
     });
+    console.log(res.data);
     if (res.status === 201) {
       ElMessage({
         type: "success",
@@ -41,25 +42,33 @@ export const useAuthStore = defineStore("auth", () => {
       console.log(res.da);
       setUser(res.data);
       tokenStore.setToken(res.data.token);
-      router.push({name:"dashboard"})
+      router.push({ name: "dashboard" });
     }
   };
 
-  const checkUser=async()=>{
-    if(cookie.isKey('bogcha-token')){
-      tokenStore.setToken(cookie.get('bogcha-token'));
+  const checkUser = async () => {
+    if (cookie.isKey("bogcha-token")) {
+      tokenStore.setToken(cookie.get("bogcha-token"));
     }
-    let res=await apiStore.getAxios({
+    let res = await apiStore.getAxios({
       url: "auth/checkuser",
-    })
-    if(res.status === 200){
+    });
+    if (res.status === 200) {
       console.log(res.data);
     }
-  }
+  };
+
+  const checkLogin = async (data) => {
+    return await apiStore.postAxios({
+      url: "auth/checkLogin",
+      data,
+    });
+  };
   return {
     login,
     registration,
     user,
-    checkUser
+    checkUser,
+    checkLogin,
   };
 });

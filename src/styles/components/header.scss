@@ -1,0 +1,18 @@
+@import '../vars/colors.scss';
+
+header{
+    width: 100%;
+    background-color: $grey;
+}
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    .logo{
+        font-size:18px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #fff;
+    }
+}

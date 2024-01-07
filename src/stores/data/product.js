@@ -7,7 +7,7 @@ export const useProductStore = defineStore("product", () => {
 
   const getAllProducts = async () => {
     let res=await api.getAxis({
-        url:'product',
+        url:'product'
   })
   if(res.status===200){
     product.value=[...res.data]
